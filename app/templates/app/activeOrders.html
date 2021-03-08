@@ -1,0 +1,49 @@
+{% extends "app/base.html" %}
+{% block content %}
+
+<h1>ACTIVE ORDERS </h1>
+<br>
+<h3> BUY ORDERS</h3>
+<table>
+    <tr>
+        <th>USERNAME   </th>
+        <th>PRICE   </th>
+        <th>QUANTITY   </th>
+        <th>DATETIME   </th>
+
+    </tr>
+    {% for order in buyOrders %}
+        <tr>
+            <td>  <article class="media content-section"><b>{{ order.profile }}  </b></article></td>
+            <td>  <article class="media content-section">{{ order.price }}</article></td>
+            <td>  <article class="media content-section">{{ order.quantity }}</article></td>
+            <td>  <article class="media content-section">{{ order.datetime }}</article></td>
+        </tr>
+
+    {% endfor %}
+
+     </table>
+
+<h3> SELL ORDERS </h3>
+<table>
+    <tr>
+        <th>USERNAME</th>
+        <th>PRICE</th>
+        <th>QUANTITY</th>
+        <th>DATETIME</th>
+
+    </tr>
+    {% for order in buyOrders %}
+        <tr>
+            <td>  <article class="media content-section"><b>{{ order.profile  }}</b></article></td>
+            <td>  <article class="media content-section">{{ order.price }}</article></td>
+            <td>  <article class="media content-section">{{ order.quantity }}</article></td>
+            <td>  <article class="media content-section">{{ order.datetime }}</article></td>
+        </tr>
+
+    {% endfor %}
+
+     </table>
+
+
+{% endblock %}

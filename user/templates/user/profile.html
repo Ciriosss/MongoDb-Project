@@ -1,0 +1,19 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+<h1>  Profile of {{ user}}</h1>
+<br>
+<h4> <font color="#5f788a"> PERSONAL INFO </font></h4>
+ <div class="content-section">
+        <div class="media-body">
+            <strong><font color = "7FFFD4">FIRST NAME :</font> {{ user.first_name}}</strong><br>
+            <strong><font color = "7FFFD4">LAST NAME :</font> {{ user.last_name}} </strong><br>
+            <strong><font color = "7FFFD4">EMAIL : </font>{{ user.email}}</strong><br>
+            <strong><font color = "7FFFD4">BALANCE :</font>  </strong>
+        </div>
+ </div>
+
+<!-- USER ORDERS-->
+    <legend class = 'border-bottom mb-4'><h4> <font color="#5f788a"> YOUR ORDERS </font></h4> </legend>
+
+{% endblock %}
