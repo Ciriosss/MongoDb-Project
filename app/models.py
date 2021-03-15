@@ -4,7 +4,7 @@ from djongo.models.fields import ObjectIdField
 
 class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    initialBTC = models.FloatField()
+    initial_btc = models.FloatField()
     BTC = models.FloatField()
     balance = models.FloatField()
 
@@ -14,6 +14,8 @@ class BuyOrder(models.Model):
     datetime = models.DateTimeField(auto_now_add=True)
     price = models.FloatField()
     quantity = models.FloatField()
+    matched = models.BooleanField(default=False)
+    remaining = models.FloatField()
 
 class SellOrder(models.Model):
 
@@ -21,3 +23,5 @@ class SellOrder(models.Model):
     datetime = models.DateTimeField(auto_now_add=True)
     price = models.FloatField()
     quantity = models.FloatField()
+    matched = models.BooleanField(default=False)
+    remaining = models.FloatField()

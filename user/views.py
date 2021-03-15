@@ -1,46 +1,61 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import UserRegisterForm, NewBuyOrder
+from .forms import UserRegisterForm, NewBuyOrder, NewSellOrder
 from app.models import Profile, BuyOrder, SellOrder
 from django.contrib.auth.models import User
-import random
+from .functions import newProfile, matchbuyOrder, matchsellOrder
 
-def randomBTC():
 
-    btc = round(random.uniform(0,11),2)
-    return btc
 
+
+#view for registration
 def register(request):
-    inizial_b = randomBTC()
+
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
             messages.success(request,'Congratulations {}! your account has been created successfully, now you are able to log-in'.format(username))
-            Profile.objects.create(user = User.objects.get(id = request.user.id), initial_b = inizial_b, actual_b = inizial_b)
+            newProfile(username)
             return redirect('login')
     else:
         form = UserRegisterForm()
     return render(request, 'user/register.html', {'form': form})
 
+#view for profile page
 def profile(request):
-    user = User.objects.get(username = request.user.username)
+    user = User.objects.get(username = request.user)
     profile = Profile.objects.get(user = user)
-    profit = profile
-    return render(request, 'user/profile.html', {'user':user, 'profile':profile, 'profit':profit})
+    balance = profile.balance
+    BTC = profile.BTC
 
+
+    buyorders = BuyOrder.objects.filter(profile=profile)
+    sellorders = SellOrder.objects.filter(profile=profile)
+    return render(request, 'user/profile.html', {'balance' : balance, 'BTC' : BTC,'buyorders': buyorders, 'sellorders': sellorders})
+
+
+#view for trade page
 def trade(request):
-    #profile = User.objects.get(username = request.user)
+    user = User.objects.get(username = request.user)
+    profile = Profile.objects.get(user = user )
     if request.method == 'POST':
-        form = NewBuyOrder(request.POST)
+        if ('buy' in request.POST):
+            form = NewBuyOrder(request.POST)
+        else:
+            form = NewSellOrder(request.POST)
         if form.is_valid():
-            newbuyorder = form.save(commit=False)
-            price = request.POST.get('price')
-            quantity = request.POST.get('quantity')
-            BuyOrder.objects.create(profile = profile, price = price, quantity = quantity)
-            return redirect('home')
-
+            order = form.save(commit=False)
+            order.profile = profile
+            order.remaining = order.quantity
+            order.save()
+            messages.success(request, 'Your order has benn resistred')
+            if ('buy' in request.POST):
+                matchbuyOrder(order)
+            elif ('sell' in request.POST):
+                matchsellOrder(order)
+            return redirect('profile')
     else:
         form = NewBuyOrder()
     return render(request, 'user/trade.html', {'form' : form})

@@ -3,17 +3,50 @@
 {% block content %}
 <h1>  Profile of {{ user}}</h1>
 <br>
-<h4> <font color="#5f788a"> PERSONAL INFO </font></h4>
+<h2> <font color="#5f788a"> PERSONAL INFO </font></h2>
  <div class="content-section">
         <div class="media-body">
             <strong><font color = "7FFFD4">FIRST NAME :</font> {{ user.first_name}}</strong><br>
             <strong><font color = "7FFFD4">LAST NAME :</font> {{ user.last_name}} </strong><br>
             <strong><font color = "7FFFD4">EMAIL : </font>{{ user.email}}</strong><br>
-            <strong><font color = "7FFFD4">BALANCE :</font>   </strong>
+            <strong><font color = "7FFFD4">BALANCE :</font> {{ balance }} € </strong><br>
+            <strong><font color = "7FFFD4">BITCOIN :</font> {{ BTC }} BTC </strong>
         </div>
  </div>
 
 <!-- USER ORDERS-->
-    <legend class = 'border-bottom mb-4'><h4> <font color="#5f788a"> YOUR ORDERS </font></h4> </legend>
+    <legend class = 'border-bottom mb-4'><h2> <font color="#5f788a"> YOUR ORDERS </font></h2> </legend>
 
+    <legend class = 'border-bottom mb-4'><h4> <font color="#5f788a"> BUY ORDERS </font></h4> </legend>
+    {% for order in buyorders %}
+        <tr>
+            <td>  <article class="media content-section"><b> {{ order.price }} - {{ order.quantity }}  -  {{ order.datetime }}  -
+
+            {% if order.matched == True %}
+               COMPLETED
+            {% else%}
+                TO COMPLETE - {{order.remaining}}
+            {% endif %}
+
+            </b></article></td>
+        </tr>
+
+    {% endfor %}
+
+    <legend class = 'border-bottom mb-4'><h4> <font color="#5f788a"> SELL ORDERS </font></h4> </legend>
+
+    {% for order in sellorders %}
+        <tr>
+            <td>  <article class="media content-section"><b> {{ order.price }} - {{ order.quantity }}  -  {{ order.datetime }}  -
+
+            {% if order.matched == True %}
+               COMPLETED
+            {% else%}
+                TO COMPLETE - {{order.remaining}}
+            {% endif %}
+
+            </b></article></td>
+        </tr>
+
+    {% endfor %}
 {% endblock %}
