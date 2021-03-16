@@ -7,6 +7,8 @@ class Profile(models.Model):
     initial_btc = models.FloatField()
     BTC = models.FloatField()
     balance = models.FloatField()
+    pending_balance = models.FloatField()
+    pending_BTC = models.FloatField()
 
 class BuyOrder(models.Model):
 

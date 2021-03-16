@@ -29,9 +29,11 @@ def profile(request):
     profile = Profile.objects.get(user = user)
     balance = round(profile.balance,2)
     BTC = profile.BTC
+    pending_balance = abs(round(profile.pending_balance, 2))
+    pending_BTC = abs(round(profile.pending_BTC, 2))
     buyorders = BuyOrder.objects.filter(profile=profile).order_by('-datetime')
     sellorders = SellOrder.objects.filter(profile=profile).order_by('-datetime')
-    return render(request, 'user/profile.html', {'balance' : balance, 'BTC' : BTC,'buyorders': buyorders, 'sellorders': sellorders})
+    return render(request, 'user/profile.html', {'balance' : balance, 'BTC' : BTC,'buyorders': buyorders, 'sellorders': sellorders,'pending_balance':pending_balance, 'pending_BTC':pending_BTC})
 
 
 #view for trade page
@@ -39,6 +41,8 @@ def trade(request):
     user = User.objects.get(username=request.user)
     profile = Profile.objects.get(user=user)
     balance = round(profile.balance,2)
+    pending_balance = round(profile.pending_balance,2)
+    pending_BTC = round(profile.pending_BTC, 2)
     BTC = profile.BTC
     if request.method == 'POST':
         if ('buy' in request.POST):
@@ -54,6 +58,9 @@ def trade(request):
                 if form.checkBalance(request):
                     order.save()
                     messages.success(request, 'Your  buy order has been resistred')
+                    profile.pending_balance += order.price * order.quantity
+                    profile.balance -= order.price * order.quantity
+                    profile.save()
                     matchbuyOrder(order, request)
                     return redirect('profile')
                 else:
@@ -64,6 +71,9 @@ def trade(request):
                 if form.checkBTC(request):
                     order.save()
                     messages.success(request, 'Your  Sell order has been resistred')
+                    profile.pending_BTC += order.quantity
+                    profile.BTC -= order.quantity
+                    profile.save()
                     matchsellOrder(order, request)
                     return redirect('profile')
                 else:
@@ -72,4 +82,4 @@ def trade(request):
 
     else:
         form = NewBuyOrder()
-    return render(request, 'user/trade.html', {'form': form, 'balance': balance, 'BTC': BTC})
+    return render(request, 'user/trade.html', {'form': form, 'balance': balance, 'BTC': BTC, 'pending_balance':pending_balance, 'pending_BTC':pending_BTC})

@@ -12,7 +12,7 @@ def newProfile(username):
     user = User.objects.get(username=username)
     initial_btc = randombtc()
     BTC = initial_btc
-    profile = Profile.objects.create(user=user, initial_btc=initial_btc, BTC=BTC, balance=0)
+    profile = Profile.objects.create(user=user, initial_btc=initial_btc, BTC=BTC, balance=0, pending_balance = 0, pending_BTC = 0)
     profile.save()
 
 def matchbuyOrder(order, request):
@@ -26,10 +26,10 @@ def matchbuyOrder(order, request):
             profile = sellorder.profile
             seller = Profile.objects.get(id=profile.id)
             if order.remaining > sellorder.remaining :
-                buyer.balance -= round(float(order.price) * float(sellorder.remaining),2)
+                buyer.pending_balance -= round(float(order.price) * float(sellorder.remaining),2)
                 seller.balance += round(float(order.price) * float(sellorder.remaining),2)
                 buyer.BTC += round(sellorder.remaining,4)
-                seller.BTC -= round(sellorder.remaining,4)
+                seller.pending_BTC -= round(sellorder.remaining,4)
                 order.remaining -= round(sellorder.remaining,4)
                 sellorder.remaining = 0
                 sellorder.matched = True
@@ -40,10 +40,10 @@ def matchbuyOrder(order, request):
                 i += 1
 
             elif order.remaining == sellorder.remaining :
-                buyer.balance -= round(float(order.price) * float(order.remaining),2)
+                buyer.pending_balance -= round(float(order.price) * float(order.remaining),2)
                 seller.balance += round(float(order.price) * float(order.remaining),2)
                 buyer.BTC += round(sellorder.remaining,4)
-                seller.BTC -= round(sellorder.remaining,4)
+                seller.pending_BTC -= round(sellorder.remaining,4)
                 sellorder.remaining = 0
                 order.remaining = 0
                 sellorder.matched = True
@@ -55,10 +55,10 @@ def matchbuyOrder(order, request):
                 break
 
             elif order.remaining < sellorder.remaining :
-                buyer.balance -= round(float(order.price) * float(order.remaining),2)
+                buyer.pending_balance -= round(float(order.price) * float(order.remaining),2)
                 seller.balance += round(float(order.price) * float(order.remaining),2)
                 buyer.BTC += round(order.remaining,4)
-                seller.BTC -= round(order.remaining,4)
+                seller.pending_BTC -= round(order.remaining,4)
                 sellorder.remaining -= round(order.remaining,4)
                 order.remaining = 0
                 order.matched = True
@@ -80,8 +80,8 @@ def matchsellOrder(order, request):
             buyer = Profile.objects.get(id=profile.id)
             if order.remaining > buyorder.remaining :
                 seller.balance += round(float(buyorder.price) * float(buyorder.remaining),2)
-                buyer.balance -= round(float(buyorder.price) * float(buyorder.remaining),2)
-                seller.BTC -= round(buyorder.remaining,4)
+                buyer.pending_balance -= round(float(buyorder.price) * float(buyorder.remaining),2)
+                seller.pending_BTC -= round(buyorder.remaining,4)
                 buyer.BTC += round(buyorder.remaining,4)
                 order.remaining -= round(buyorder.remaining,4)
                 buyorder.remaining = 0
@@ -94,9 +94,9 @@ def matchsellOrder(order, request):
 
             elif order.remaining == buyorder.remaining:
                 seller.balance += round(float(buyorder.price) * float(buyorder.remaining),2)
-                buyer.balance -= round(float(buyorder.price) * float(buyorder.remaining),2)
+                buyer.pending_balance -= round(float(buyorder.price) * float(buyorder.remaining),2)
                 buyer.BTC += round(buyorder.remaining,4)
-                seller.BTC -= round(buyorder.remaining,4)
+                seller.pending_BTC -= round(buyorder.remaining,4)
                 buyorder.matched = True
                 order.matched = True
                 buyorder.remaining = 0
@@ -109,9 +109,9 @@ def matchsellOrder(order, request):
 
             elif order.remaining < buyorder.remaining :
                 seller.balance += round(float(buyorder.price) * float(order.remaining),2)
-                buyer.balance -= round(float(buyorder.price) * float(buyorder.remaining),2)
+                buyer.pending_balance -= round(float(buyorder.price) * float(buyorder.remaining),2)
                 buyer.BTC += round(order.remaining,4)
-                seller.BTC -= round(order.remaining,4)
+                seller.pending_BTC -= round(order.remaining,4)
                 buyorder.remaining -= round(order.remaining,4)
                 order.remaining = 0
                 order.matched = True
