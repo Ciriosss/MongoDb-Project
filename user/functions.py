@@ -19,18 +19,17 @@ def matchbuyOrder(order):
 
     if len(sellorders) > 0:
         i = 0
-        while  (order.matched == False) or (i <= ( len(sellorders) - 1)) :
+        while  (order.matched == False) and (i <= ( len(sellorders) - 1)) :
             sellorder = sellorders[i]
-            if order.remaining > sellorder.quantity :
+            if order.remaining > sellorder.remaining :
+                order.remaining -= sellorder.remaining
                 sellorder.matched = True
                 sellorder.remaining = 0
-                order.remaining = order.quantity - sellorder.quantity
                 sellorder.save()
                 order.save()
                 i += 1
-                break
 
-            elif order.remaining == sellorder.quantity :
+            elif order.remaining == sellorder.remaining :
                 sellorder.matched = True
                 order.matched = True
                 sellorder.remaining = 0
@@ -39,12 +38,14 @@ def matchbuyOrder(order):
                 order.save()
                 break
 
-            elif order.remaining < sellorder.quantity :
+            elif order.remaining < sellorder.remaining :
+                sellorder.remaining -= order.remaining
                 order.matched = True
                 order.remaining = 0
-                sellorder.remaining = sellorder.quantity - order.quantity
                 sellorder.save()
                 order.save()
+                break
+
 
 
 def matchsellOrder(order):
@@ -52,18 +53,17 @@ def matchsellOrder(order):
 
     if len(buyorders) > 0:
         i = 0
-        while  (order.matched == False) or (i <= ( len(buyorders) - 1)) :
+        while  (order.matched == False) and (i <= ( len(buyorders) - 1 )) :
             buyorder = buyorders[i]
-            if order.remaining > buyorder.quantity :
+            if order.remaining > buyorder.remaining :
+                order.remaining -= buyorder.remaining
                 buyorder.matched = True
                 buyorder.remaining = 0
-                order.remaining = order.quantity - buyorder.quantity
                 buyorder.save()
                 order.save()
                 i += 1
-                break
 
-            elif order.remaining == buyorder.quantity:
+            elif order.remaining == buyorder.remaining:
                 buyorder.matched = True
                 order.matched = True
                 buyorder.remaining = 0
@@ -72,11 +72,12 @@ def matchsellOrder(order):
                 order.save()
                 break
 
-            elif order.remaining < buyorder.quantity :
+            elif order.remaining < buyorder.remaining :
+                buyorder.remaining -= order.remaining
                 order.matched = True
                 order.remaining = 0
-                buyorder.remaining = buyorder.quantity - order.quantity
                 buyorder.save()
                 order.save()
+                break
 
 

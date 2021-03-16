@@ -20,7 +20,7 @@
     <legend class = 'border-bottom mb-4'><h4> <font color="#5f788a"> BUY ORDERS </font></h4> </legend>
     {% for order in buyorders %}
         <tr>
-            <td>  <article class="media content-section"><b> {{ order.price }} - {{ order.quantity }}  -  {{ order.datetime }}  -
+            <td>  <article class="media content-section"><b> ID. {{ order.id }}     -   {{ order.price }} €     -    {{ order.quantity }} BTC    -    {{ order.datetime }}   -
 
             {% if order.matched == True %}
                COMPLETED

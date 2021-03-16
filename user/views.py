@@ -40,6 +40,8 @@ def profile(request):
 def trade(request):
     user = User.objects.get(username = request.user)
     profile = Profile.objects.get(user = user )
+    balance = profile.balance
+    BTC = profile.BTC
     if request.method == 'POST':
         if ('buy' in request.POST):
             form = NewBuyOrder(request.POST)
@@ -58,4 +60,4 @@ def trade(request):
             return redirect('profile')
     else:
         form = NewBuyOrder()
-    return render(request, 'user/trade.html', {'form' : form})
+    return render(request, 'user/trade.html', {'form' : form, 'balance' : balance,'BTC' : BTC})
