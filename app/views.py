@@ -9,6 +9,6 @@ def t_balance(request):
     return render(request, 'app/t_balance.html', {})
 
 def activeOrders(request):
-    sellOrders  = SellOrder.objects.all()
-    buyOrders = BuyOrder.objects.all()
-    return render(request, 'app/activeOrders.html', {'buyOrders' : buyOrders, 'sellOrders':sellOrders})
+    sellorders  = SellOrder.objects.filter(matched = False).order_by('-datetime')
+    buyorders = BuyOrder.objects.filter(matched = False).order_by('-datetime')
+    return render(request, 'app/activeOrders.html', {'buyorders' : buyorders, 'sellOrders' : sellorders})

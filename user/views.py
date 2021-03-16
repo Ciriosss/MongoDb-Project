@@ -29,10 +29,8 @@ def profile(request):
     profile = Profile.objects.get(user = user)
     balance = profile.balance
     BTC = profile.BTC
-
-
-    buyorders = BuyOrder.objects.filter(profile=profile)
-    sellorders = SellOrder.objects.filter(profile=profile)
+    buyorders = BuyOrder.objects.filter(profile=profile).order_by('-datetime')
+    sellorders = SellOrder.objects.filter(profile=profile).order_by('-datetime')
     return render(request, 'user/profile.html', {'balance' : balance, 'BTC' : BTC,'buyorders': buyorders, 'sellorders': sellorders})
 
 
@@ -65,7 +63,7 @@ def trade(request):
             elif ('sell' in request.POST):
                 if form.checkBTC(request):
                     order.save()
-                    messages.success(request, 'Your  Ssell order has been resistred')
+                    messages.success(request, 'Your  Sell order has been resistred')
                     matchsellOrder(order, request)
                     return redirect('profile')
                 else:

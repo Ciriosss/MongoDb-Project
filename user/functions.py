@@ -15,17 +15,6 @@ def newProfile(username):
     profile = Profile.objects.create(user=user, initial_btc=initial_btc, BTC=BTC, balance=0)
     profile.save()
 
-def seller(sellorder):
-    profile = sellorder.profile
-    seller = Profile.objects.get(id = profile.id)
-    return seller
-
-def buyer(buyorder):
-    profile = buyorder.profile
-    buyer = Profile.objects.get(id=profile.id)
-    return buyer
-
-
 def matchbuyOrder(order, request):
     sellorders = SellOrder.objects.filter(matched = False, price__lte = order.price).order_by('price')
     user = User.objects.get(username = request.user)

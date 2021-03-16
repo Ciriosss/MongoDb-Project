@@ -3,46 +3,49 @@
 {% block content %}
 <h1>  Profile of {{ user}}</h1>
 <br>
-<h2> <font color="#5f788a"> PERSONAL INFO </font></h2>
- <div class="content-section">
-        <div class="media-body">
-            <strong><font color = "7FFFD4">FIRST NAME :</font> {{ user.first_name}}</strong><br>
-            <strong><font color = "7FFFD4">LAST NAME :</font> {{ user.last_name}} </strong><br>
-            <strong><font color = "7FFFD4">EMAIL : </font>{{ user.email}}</strong><br>
-            <strong><font color = "7FFFD4">BALANCE :</font> {{ balance }} € </strong><br>
-            <strong><font color = "7FFFD4">BITCOIN :</font> {{ BTC }} BTC </strong>
-        </div>
- </div>
-
+<legend class = 'border-bottom mb-4'><h2> <font color="#7FFFD4"> PERSONAL INFO </font></h2> </legend> <br><br>
+<div class="media-body">
+    <strong><font color = "white">FIRST NAME :</font> <font color = "#7FFFD4">{{ user.first_name}}</font></strong><br>
+    <strong><font color = "white">LAST NAME :</font> <font color = "#7FFFD4">{{ user.last_name}} </font></strong><br>
+    <strong><font color = "white">EMAIL : </font><font color = "#7FFFD4">{{ user.email}}</font></strong><br>
+    <strong><font color = "white">BALANCE :</font> <font color = "#7FFFD4">{{ balance }} € </font></strong><br>
+    <strong><font color = "white">BITCOIN :</font> <font color = "#7FFFD4">{{ BTC }} BTC</font> </strong>
+</div>
+<br><br>
 <!-- USER ORDERS-->
-    <legend class = 'border-bottom mb-4'><h2> <font color="#5f788a"> YOUR ORDERS </font></h2> </legend>
+    <legend class = 'border-bottom mb-4'><h2> <font color="#7FFFD4"> YOUR ORDERS </font></h2> </legend> <br><br>
 
-    <legend class = 'border-bottom mb-4'><h4> <font color="#5f788a"> BUY ORDERS </font></h4> </legend>
-    {% for order in buyorders %}
-        <tr>
-            <td>  <article class="media content-section"><b> ID. {{ order.id }}     -   {{ order.price }} €     -    {{ order.quantity }} BTC    -    {{ order.datetime }}   -
+    <legend class = 'border-bottom mb-4'><h5> <font color="#7FFFD4"> BUY ORDERS </font></h5> </legend>
 
-            {% if order.matched == True %}
-               COMPLETED
-            {% else%}
-                TO COMPLETE - {{order.remaining}}
-            {% endif %}
+                {% for order in buyorders %}
+                    <tr>
+                        <td>  <article class="media content-section"><b>
+                            ID. {{ order.id }}     -
+                            {{ order.price }} €     -
+                            {{ order.quantity }} BTC    -
+                            {{ order.datetime }}   -
 
-            </b></article></td>
-        </tr>
+                        {% if order.matched == True %}
+                           <font color="#7FFFD4"> CLOSE </font>
+                        {% else%}
+                            <font color="c7c700"> OPEN </font>- {{order.remaining}}
+                        {% endif %}
 
-    {% endfor %}
+                        </b></article></td>
+                    </tr>
+                {% endfor %}
 
-    <legend class = 'border-bottom mb-4'><h4> <font color="#5f788a"> SELL ORDERS </font></h4> </legend>
+    <br><br><br>
+    <legend class = 'border-bottom mb-4'><h5> <font color="#7FFFD4"> SELL ORDERS </font></h5> </legend>
 
     {% for order in sellorders %}
         <tr>
             <td>  <article class="media content-section"><b> {{ order.price }} - {{ order.quantity }}  -  {{ order.datetime }}  -
 
             {% if order.matched == True %}
-               COMPLETED
+              <font color="#7FFFD4"> CLOSE </font>
             {% else%}
-                TO COMPLETE - {{order.remaining}}
+                <font color="c7c700"> OPEN </font>- {{order.remaining}}
             {% endif %}
 
             </b></article></td>

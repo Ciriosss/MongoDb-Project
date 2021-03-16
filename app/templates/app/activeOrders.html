@@ -3,47 +3,78 @@
 
 <h1>ACTIVE ORDERS </h1>
 <br>
-<h3> BUY ORDERS</h3>
-<table>
+ <style>
+    table{
+    font-size:20px;
+    height:200px;
+    }
+    th{
+    color:#5f788a;
+    }
+    td,th{
+    width:150px;
+    text-align:left;
+    }
+    </style>
+
+    <legend class = 'border-bottom mb-4'><h5> <font color="#7FFFD4"> BUY ORDERS </font></h5> </legend>
+    <table>
     <tr>
-        <th>USERNAME   </th>
-        <th>PRICE   </th>
-        <th>QUANTITY   </th>
-        <th>DATETIME   </th>
-
-    </tr>
-    {% for order in buyOrders %}
-        <tr>
-            <td>  <article class="media content-section"><b>{{ order.profile }}  </b></article></td>
-            <td>  <article class="media content-section">{{ order.price }}</article></td>
-            <td>  <article class="media content-section">{{ order.quantity }}</article></td>
-            <td>  <article class="media content-section">{{ order.datetime }}</article></td>
-        </tr>
-
-    {% endfor %}
-
-     </table>
-
-<h3> SELL ORDERS </h3>
-<table>
-    <tr>
-        <th>USERNAME</th>
+        <th>ID ORDER</th>
+        <th>ID PROFILE</th>
         <th>PRICE</th>
         <th>QUANTITY</th>
         <th>DATETIME</th>
-
+        <th>REMAINING</th>
     </tr>
-    {% for order in buyOrders %}
+
+    {% for order in buyorders %}
+
         <tr>
-            <td>  <article class="media content-section"><b>{{ order.profile  }}</b></article></td>
-            <td>  <article class="media content-section">{{ order.price }}</article></td>
-            <td>  <article class="media content-section">{{ order.quantity }}</article></td>
-            <td>  <article class="media content-section">{{ order.datetime }}</article></td>
+                <td> <b><font color = 'white'>  {{ order.id }} </font></b></td>
+                <td> <b><font color = 'white'>  {{ order.profile.id }}</font></b></td>
+                <td> <b><font color = 'white'>  {{ order.price }}</font></b></td>
+                <td> <b><font color = 'white'>  {{ order.quantity }}</font></b></td>
+                <td> <b><font color = 'white'>  {{ order.datetime}}</font></b></td>
+                <td> <b><font color = 'white'>  {{ order.remaining}}</font></b></td>
+            </article>
         </tr>
+
 
     {% endfor %}
 
      </table>
 
+<br>
+<br>
+<br>
 
+
+    <legend class = 'border-bottom mb-4'><h5> <font color="#7FFFD4"> SELL ORDERS </font></h5> </legend>
+    <table>
+    <tr>
+        <th>ID ORDER</th>
+        <th>ID PROFILE</th>
+        <th>PRICE</th>
+        <th>QUANTITY</th>
+        <th>DATETIME</th>
+        <th>REMAINING</th>
+    </tr>
+
+    {% for order in sellorders %}
+
+        <tr>
+                <td> <b><font color = 'white'>  {{ order.id }} </font></b></td>
+                <td> <b><font color = 'white'>  {{ order.profile.id }}</font></b></td>
+                <td> <b><font color = 'white'>  {{ order.price }}</font></b></td>
+                <td> <b><font color = 'white'>  {{ order.quantity }}</font></b></td>
+                <td> <b><font color = 'white'>  {{ order.datetime}}</font></b></td>
+                <td> <b><font color = 'white'>  {{ order.remaining}}</font></b></td>
+            </article>
+        </tr>
+
+
+    {% endfor %}
+
+     </table>
 {% endblock %}

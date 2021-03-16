@@ -1,8 +1,8 @@
 {% extends 'app/base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-<h1> HERE YOU CAN TRADE YOU BITCOINS</h1> <br>
-<h5> YOU CAN SPEND {{ balance }} € AND  {{ BTC }} BTC </h5>
+<h1> TRADE PAGE</h1> <br>
+<h4> <font color = 'ffffff'>YOU CAN SPEND <font color = '7FFFD4'>{{ balance }} € </font > AND  <font color = '7FFFD4'>{{ BTC }} BTC</font > </font> </h4>
     <div class = 'content section'>
         <form method = 'POST'>
             {% csrf_token %}
