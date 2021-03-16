@@ -27,7 +27,7 @@ def register(request):
 def profile(request):
     user = User.objects.get(username = request.user)
     profile = Profile.objects.get(user = user)
-    balance = profile.balance
+    balance = round(profile.balance,2)
     BTC = profile.BTC
     buyorders = BuyOrder.objects.filter(profile=profile).order_by('-datetime')
     sellorders = SellOrder.objects.filter(profile=profile).order_by('-datetime')
@@ -38,7 +38,7 @@ def profile(request):
 def trade(request):
     user = User.objects.get(username=request.user)
     profile = Profile.objects.get(user=user)
-    balance = profile.balance
+    balance = round(profile.balance,2)
     BTC = profile.BTC
     if request.method == 'POST':
         if ('buy' in request.POST):
