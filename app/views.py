@@ -8,8 +8,10 @@ def home(request):
 
 def t_balance(request):
     profiles = Profile.objects.all()
+    id = 0
     if request.GET.get('profile'):
-        profile = request.GET.get('profile')
+        id = request.GET.get('profile')
+        profile = Profile.objects.get(id = id)
         revenues = 0
         costs = 0
         profit = 0
@@ -19,10 +21,10 @@ def t_balance(request):
         buyorders = BuyOrder.objects.filter(profile=profile)
         for buyorder in buyorders:
             costs += ((buyorder.quantity * buyorder.price) - (buyorder.remaining * buyorder.price))
-        profit = (revenues - costs)
+        profit = round((revenues - costs),2)
     else:
         profit = 0
-    return render(request, 'app/t_balance.html', {'profiles' : profiles, 'profit' : profit})
+    return render(request, 'app/t_balance.html', {'profiles' : profiles, 'profit' : profit , 'id': id })
 
 
 
