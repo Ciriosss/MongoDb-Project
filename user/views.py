@@ -38,8 +38,8 @@ def profile(request):
 
 #view for trade page
 def trade(request):
-    user = User.objects.get(username = request.user)
-    profile = Profile.objects.get(user = user )
+    user = User.objects.get(username=request.user)
+    profile = Profile.objects.get(user=user)
     balance = profile.balance
     BTC = profile.BTC
     if request.method == 'POST':
@@ -51,13 +51,27 @@ def trade(request):
             order = form.save(commit=False)
             order.profile = profile
             order.remaining = order.quantity
-            order.save()
-            messages.success(request, 'Your order has benn resistred')
+
             if ('buy' in request.POST):
-                matchbuyOrder(order)
+                if form.checkBalance(request):
+                    order.save()
+                    messages.success(request, 'Your  buy order has been resistred')
+                    matchbuyOrder(order, request)
+                    return redirect('profile')
+                else:
+                    messages.warning(request, 'Error, you dont have enough funds ')
+                    return redirect('trade')
+
             elif ('sell' in request.POST):
-                matchsellOrder(order)
-            return redirect('profile')
+                if form.checkBTC(request):
+                    order.save()
+                    messages.success(request, 'Your  Ssell order has been resistred')
+                    matchsellOrder(order, request)
+                    return redirect('profile')
+                else:
+                    messages.warning(request, 'Error, you dont have enough bitcoins ')
+                    return redirect('trade')
+
     else:
         form = NewBuyOrder()
-    return render(request, 'user/trade.html', {'form' : form, 'balance' : balance,'BTC' : BTC})
+    return render(request, 'user/trade.html', {'form': form, 'balance': balance, 'BTC': BTC})
