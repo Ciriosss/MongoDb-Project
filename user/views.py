@@ -28,7 +28,7 @@ def profile(request):
     user = User.objects.get(username = request.user)
     profile = Profile.objects.get(user = user)
     balance = round(profile.balance,2)
-    BTC = profile.BTC
+    BTC = round(profile.BTC,2)
     pending_balance = abs(round(profile.pending_balance, 2))
     pending_BTC = abs(round(profile.pending_BTC, 2))
     buyorders = BuyOrder.objects.filter(profile=profile).order_by('-datetime')
@@ -43,7 +43,7 @@ def trade(request):
     balance = round(profile.balance,2)
     pending_balance = round(profile.pending_balance,2)
     pending_BTC = round(profile.pending_BTC, 2)
-    BTC = profile.BTC
+    BTC = round(profile.BTC,2)
     if request.method == 'POST':
         if ('buy' in request.POST):
             form = NewBuyOrder(request.POST)

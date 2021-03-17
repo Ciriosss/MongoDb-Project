@@ -6,7 +6,7 @@ def home(request):
     return render(request,'app/home.html', {})
 
 
-def t_balance(request):
+def profit(request):
     profiles = Profile.objects.all()
     id = 0
     if request.GET.get('profile'):
@@ -15,21 +15,42 @@ def t_balance(request):
         revenues = 0
         costs = 0
         profit = 0
-        sellorders = SellOrder.objects.filter(profile=profile)
-        for sellorder in sellorders:
-            revenues += ((sellorder.quantity * sellorder.price) - (sellorder.remaining * sellorder.price))
+        message = ''
+
         buyorders = BuyOrder.objects.filter(profile=profile)
-        for buyorder in buyorders:
-            costs += ((buyorder.quantity * buyorder.price) - (buyorder.remaining * buyorder.price))
-        profit = round((revenues - costs),2)
-    else:
-        profit = 0
-    return render(request, 'app/t_balance.html', {'profiles' : profiles, 'profit' : profit , 'id': id })
+        sellorders = SellOrder.objects.filter(profile=profile)
+
+        if (len(sellorders) == 0 )and (len(buyorders) == 0):
+            profit = 0
+            message = 'This user has not performed any transactions yet '
+
+        elif (len(sellorders) > 0) and  (len(buyorders) == 0):
+            for sellorder in sellorders:
+                revenues += ((sellorder.quantity - sellorder.remaining) * (sellorder.price))
+            profit = revenues
+            message = 'This user has only placed sales orders'
+
+        elif (len(sellorders) == 0) and  (len(buyorders) > 0):
+            for buyorder in buyorders:
+                costs += ((buyorder.quantity * buyorder.price) - (buyorder.remaining * buyorder.price))
+            profit -= costs
+            message = 'This user has only placed buy orders, he never sold'
+
+        else:
+            for sellorder in sellorders:
+                revenues += ((sellorder.quantity - sellorder.remaining) * (sellorder.price))
+
+            for buyorder in buyorders:
+                costs += ((buyorder.quantity * buyorder.price) - (buyorder.remaining * buyorder.price))
+            profit = revenues - costs
+        return render(request, 'app/profit.html',{'profiles': profiles, 'profit': profit, 'id': id, 'message': message})
+
+    return render(request, 'app/profit.html', {'profiles' : profiles})
 
 
 
 
-def activeOrders(request):
+def orderBook(request):
     sellorders  = SellOrder.objects.all().filter(matched = False).order_by('-datetime')
     buyorders = BuyOrder.objects.all().filter(matched = False).order_by('-datetime')
-    return render(request, 'app/activeOrders.html', {'buyorders' : buyorders, 'sellorders' : sellorders})
+    return render(request, 'app/orderBook.html', {'buyorders' : buyorders, 'sellorders' : sellorders})
