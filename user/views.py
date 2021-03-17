@@ -4,6 +4,7 @@ from .forms import UserRegisterForm, NewBuyOrder, NewSellOrder
 from app.models import Profile, BuyOrder, SellOrder
 from django.contrib.auth.models import User
 from .functions import newProfile, matchbuyOrder, matchsellOrder
+from .request import price
 
 
 
@@ -44,6 +45,7 @@ def trade(request):
     pending_balance = round(profile.pending_balance,2)
     pending_BTC = round(profile.pending_BTC, 2)
     BTC = round(profile.BTC,2)
+    actual_btc = (round(price() * 0.84 ,2))
     if request.method == 'POST':
         if ('buy' in request.POST):
             form = NewBuyOrder(request.POST)
@@ -82,4 +84,4 @@ def trade(request):
 
     else:
         form = NewBuyOrder()
-    return render(request, 'user/trade.html', {'form': form, 'balance': balance, 'BTC': BTC, 'pending_balance':pending_balance, 'pending_BTC':pending_BTC})
+    return render(request, 'user/trade.html', {'form': form, 'balance': balance, 'BTC': BTC, 'pending_balance':pending_balance, 'pending_BTC':pending_BTC, 'actual_btc': actual_btc})
